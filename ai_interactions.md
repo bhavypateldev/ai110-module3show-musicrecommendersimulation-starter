@@ -10,19 +10,19 @@
 
 **What task did you give the agent?**
 
-<!-- Describe the goal you asked the agent to accomplish -->
+I asked the agent to implement Challenge 1 (adding advanced song features like `popularity` and `release_decade`) by updating the `songs.csv` dataset and modifying the Python parsing and scoring logic to account for these new dimensions.
 
 **Prompts used:**
 
-<!-- Paste the key prompts you gave the agent -->
+"Add popularity (0-100) and release_decade (e.g. 1990, 2020) to data/songs.csv and update the Song and UserProfile dataclasses in src/recommender.py to support them. Also ensure the scoring logic factors them in."
 
 **What did the agent generate or change?**
 
-<!-- List the files edited, code generated, or commands run -->
+The agent completely rewrote `data/songs.csv` to inject realistic popularity and decade values for all 18 songs. It then modified `src/recommender.py` to add those fields to the dataclasses and update `load_songs` to cast them correctly. It also added distance proximity matching for popularity and exact-matching for decade.
 
 **What did you verify or fix manually?**
 
-<!-- Describe anything the agent got wrong or that required human review -->
+I had to ensure the agent provided default values in the `Song` and `UserProfile` dataclasses so that the existing test suite in `tests/test_recommender.py` would not break (since the test suite only instantiates objects with the baseline fields).
 
 ---
 
@@ -32,12 +32,12 @@
 
 **Which design pattern did you use?**
 
-<!-- e.g., Strategy, Factory, Observer, etc. -->
+The **Strategy Pattern**.
 
 **How did AI help you brainstorm or implement it?**
 
-<!-- Describe the conversation or suggestions that led to your decision -->
+I used the AI to help me restructure the hardcoded scoring dictionary into a class-based hierarchy. We defined a `ScoringStrategy` base class and created subclasses like `BalancedScorer`, `GenreFirstScorer`, and `EnergyFocusedScorer`. 
 
 **How does the pattern appear in your final code?**
 
-<!-- Point to the relevant class or method -->
+In `src/recommender.py`, there is an abstract class `ScoringStrategy`. The function `recommend_songs` now takes a `strategy` object as an argument. Depending on which strategy is passed from `src/main.py`, the recommendation logic dynamically changes its weights without altering the underlying recommendation loop.
