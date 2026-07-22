@@ -26,7 +26,7 @@ That is exactly what VibeMatch does. For each song in the catalog, it checks:
 4. **Valence (positivity)** -- Same proximity logic as energy. Measures how upbeat vs. melancholy the song is. Worth up to 1.0 point.
 5. **Acousticness** -- If you prefer acoustic music, songs with more acoustic qualities score higher; if not, electronic-sounding tracks win. Worth up to 0.5 points.
 
-The maximum possible score is 8.0 (a perfect match on every dimension). After scoring all songs, VibeMatch sorts them highest-to-lowest and shows you the top 5.
+The maximum possible score is 10.5 (a perfect match on every dimension). After scoring all songs, VibeMatch sorts them highest-to-lowest and shows you the top 5.
 
 Compared to the starter code (which just returned the first k songs with no logic), this version implements real weighted scoring with per-feature explanations.
 
@@ -34,7 +34,7 @@ Compared to the starter code (which just returned the first k songs with no logi
 
 ## 4. Data  
 
-The catalog contains **18 songs** with 10 attributes each (id, title, artist, genre, mood, energy, tempo_bpm, valence, danceability, acousticness).
+The catalog contains **18 songs** with 15 attributes each (id, title, artist, genre, mood, energy, tempo_bpm, valence, danceability, acousticness, popularity, release_decade, instrumentalness, speechiness, liveness).
 
 **Genres represented (10):** pop, lofi, rock, ambient, jazz, synthwave, indie pop, hip-hop, electronic, classical, r&b, folk, metal, latin, country
 
@@ -42,7 +42,7 @@ The catalog contains **18 songs** with 10 attributes each (id, title, artist, ge
 
 The original starter dataset had 10 songs. I added 8 new songs to cover genres and moods that were missing (hip-hop, electronic, classical, r&b, folk, metal, latin, country).
 
-**Missing aspects of musical taste:** The dataset does not capture lyrics/language, song length, release year, or cultural context. It also has no concept of "similar" genres -- the system treats rock and metal as completely unrelated, even though they share sonic DNA.
+**Missing aspects of musical taste:** The dataset does not capture lyrics/language, song length, or cultural context. It also has no concept of "similar" genres -- the system treats rock and metal as completely unrelated, even though they share sonic DNA.
 
 ---
 

@@ -30,6 +30,11 @@ Each `Song` object stores the following attributes from `data/songs.csv`:
 - **`valence`** — float 0–1, musical positiveness (high = happy)
 - **`danceability`** — float 0–1, how suitable for dancing
 - **`acousticness`** — float 0–1, confidence the track is acoustic
+- **`popularity`** — int 0–100, simulated streaming popularity score
+- **`release_decade`** — int, decade the track was released (e.g., 1990, 2020)
+- **`instrumentalness`** — float 0–1, likelihood the track has no vocals
+- **`speechiness`** — float 0–1, presence of spoken words (high = podcast-like)
+- **`liveness`** — float 0–1, probability the track was recorded live
 
 ### UserProfile Data
 
@@ -53,8 +58,13 @@ Each `UserProfile` stores the user's taste preferences:
 | `energy` | Numerical | `1.0 - abs(user_target - song_value)` | **1.5** | Key situational feature (gym vs. study) |
 | `valence` | Numerical | `1.0 - abs(0.7 - song_value)` (default target) | **1.0** | Emotional nuance refinement |
 | `acousticness` | Numerical | `song_value` if `likes_acoustic`, else `1.0 - song_value` | **0.5** | Separates "unplugged" from "produced" listeners |
+| `popularity` | Numerical | `1.0 - abs(target/100 - song/100)` | **0.5** | Preference for mainstream vs. underground tracks |
+| `release_decade` | Categorical | `1.0` if exact match, else `0.0` | **1.0** | Fans of a specific era get period-matched results |
+| `instrumentalness` | Numerical | `song_value` if prefers, else `1.0 - song_value` | **0.5** | Separates vocal tracks from pure instrumental/lofi |
+| `speechiness` | Numerical | `1.0 - max(0, speech - tolerance)` | **0.3** | Penalizes podcast-like tracks for music listeners |
+| `liveness` | Numerical | `song_value` if prefers, else `1.0 - song_value` | **0.2** | Live recording preference for jazz/folk fans |
 
-**Maximum possible score:** 3.0 + 2.0 + 1.5 + 1.0 + 0.5 = **8.0**
+**Maximum possible score:** 3.0 + 2.0 + 1.5 + 1.0 + 0.5 + 0.5 + 1.0 + 0.5 + 0.3 + 0.2 = **10.5**
 
 **Ranking Rule** — produces the final list:
 1. Compute `score_song(user, song)` for every song in the catalog
@@ -204,7 +214,7 @@ Bias shows up in subtle, structural ways. The genre weight creates a filter bubb
 
 ## Optional Extensions Completed
 
-1. **Advanced Song Features:** Added `popularity` (0-100) and `release_decade` to the dataset and scoring logic.
+1. **Advanced Song Features (5 new attributes):** Added `popularity` (0-100), `release_decade`, `instrumentalness` (0-1), `speechiness` (0-1), and `liveness` (0-1) to the dataset and scoring logic. Each new attribute has a corresponding user preference and contributes to the final score.
 2. **Strategy Pattern (Multiple Modes):** Refactored scoring into modular strategies (`BalancedScorer`, `GenreFirstScorer`, `EnergyFocusedScorer`) so users can experience how different algorithms rank the exact same profile.
 3. **Diversity & Fairness Logic:** Added a greedy selection algorithm with a "Diversity Penalty" that actively subtracts points from a song if its artist or genre is already represented in the top results, preventing monotonous recommendations.
 4. **Visual Summary Table:** Overhauled the CLI output to render a clean, readable ASCII table that wraps the complex "Why" explanations neatly into columns.
